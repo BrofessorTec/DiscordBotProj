@@ -3,7 +3,11 @@ from random import choice, randint
 deathrollStarted = None
 
 def set_deathrollStarted():
+    global deathrollStarted
     deathrollStarted = True
+
+deathrollCont = 0
+deathrollContHolder = 0
 
 def get_deathrollStarted():
     return deathrollStarted
@@ -11,6 +15,8 @@ def get_deathrollStarted():
 
 def get_response(user_input: str) -> str:
     lowered: str = user_input.lower()
+    global deathrollCont
+    global deathrollContHolder
 
     print(lowered)
 
@@ -40,15 +46,25 @@ def get_response(user_input: str) -> str:
 
         return f'You rolled a {deathrollTrimNum} out of {deathrollTrim}! Use "/deathroll" to continue!'
     elif '/deathroll' in lowered:
-        if 'deathrollCont' in locals() and deathrollCont is None:
+        if deathrollCont == 0:
             deathrollCont = 999
             print(deathrollCont)
-        deathrollTrimNum = str(randint(1,deathrollCont))
-        print(deathrollTrimNum)
-        if (deathrollTrimNum == 1):
-            deathrollTrimNum = 0
-            return f'You rolled a 1! You lose Deathroll!'
-        return f'You rolled a {deathrollTrimNum} out of {deathrollCont}! Use "/deathroll" to continue!'
+        if deathrollContHolder == 0:
+            deathrollTrimNum = str(randint(1,deathrollCont))
+            print(deathrollTrimNum)
+            deathrollContHolder = deathrollTrimNum
+            if (deathrollTrimNum == 1):
+                deathrollTrimNum = 0
+                return f'You rolled a 1! You lose Deathroll!'
+            return f'You rolled a {deathrollTrimNum} out of {deathrollCont}! Use "/deathroll" to continue!'
+        else:
+            deathrollTrimNum = str(randint(1,deathrollCont))
+            print(deathrollTrimNum)
+            deathrollContHolder = deathrollTrimNum
+            if (deathrollTrimNum == 1):
+                deathrollTrimNum = 0
+                return f'You rolled a 1! You lose Deathroll!'
+            return f'You rolled a {deathrollTrimNum} out of {deathrollCont}! Use "/deathroll" to continue!'            
     else:
         return f'There was an error.'
     
