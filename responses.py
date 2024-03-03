@@ -18,10 +18,6 @@ def get_response(user_input: str) -> str:
         return
     elif len(lowered) > 300:
         return 'Woah there, that is too much info! Please use a simpler command.'
-    elif lowered == '/help':
-        helpStr = '/roll to roll a d20\n/roll [Size] to roll a die of the given size\n/deathroll [maxNum] to start a deathroll game with the given maximum\n/deathroll to continue a deathroll game or start a new one from 999'
-        # someone help me format this help string better lol. idk how to get it on multiple lines and still be one string
-        return helpStr
     elif '/roll ' in lowered:
         loweredTrim: int = int(lowered[6:])
         print(loweredTrim)
@@ -53,5 +49,9 @@ def get_response(user_input: str) -> str:
             print('loser')
             return f'You rolled a 1! You lose Deathroll!'
         return f'You rolled a {str(deathrollCurrent)} out of {str(deathrollContHolder)}! Use "/deathroll" to continue!'  
+    elif lowered == '/help' or lowered[0] == '/':
+        helpStr = 'Help:\n/roll to roll a d20\n/roll [Size] to roll a die of the given size\n/deathroll [maxNum] to start a deathroll game with the given maximum\n/deathroll to continue a deathroll game or start a new one from 999'
+        # someone help me format this help string better lol. idk how to get it on multiple lines and still be one string
+        return helpStr
     else:
         return f'There was an error.'
