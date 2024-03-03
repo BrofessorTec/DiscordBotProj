@@ -16,6 +16,8 @@ def get_response(user_input: str) -> str:
         return 'Well hello!'
     elif lowered[0] != '/':
         return
+    elif len(lowered) > 300:
+        return 'Woah there, that is too much info! Please use a simpler command.'
     elif lowered == '/help':
         helpStr = '/roll to roll a d20\n/roll [Size] to roll a die of the given size\n/deathroll [maxNum] to start a deathroll game with the given maximum\n/deathroll to continue a deathroll game or start a new one from 999'
         # someone help me format this help string better lol. idk how to get it on multiple lines and still be one string
