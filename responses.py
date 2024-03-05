@@ -3,12 +3,20 @@ from random import choice, randint
 deathrollCont = 0
 deathrollContHolder = 0
 deathrollCurrent = 0
+authorRecordsForDeathroll = dict()  #this should really be a dictionary instead and one per game
 
-def get_response(user_input: str) -> str:
+def get_response(user_input: str, author: str) -> str:
     lowered: str = user_input.lower()
     global deathrollCont
     global deathrollContHolder
     global deathrollCurrent
+    global authorRecordsForDeathroll
+    print(author)
+    print(authorRecordsForDeathroll.get(author))
+    if authorRecordsForDeathroll.get(author) is None:  #contains is not valid, check for key another way
+        authorRecordsForDeathroll[author] = 0  #initial value for each record should be zero
+
+    print(authorRecordsForDeathroll[author])
 
     print(lowered)
 
@@ -33,6 +41,7 @@ def get_response(user_input: str) -> str:
         print(deathrollTrimNum)
         if (deathrollTrimNum == 1):
             deathrollTrimNum = 0
+            authorRecordsForDeathroll[author] = authorRecordsForDeathroll[author] + 1 #keeping track of loses for this game instead
             return f'You rolled a 1! You lose Deathroll!'
         deathrollCont = deathrollTrimNum
         return f'You rolled a {deathrollTrimNum} out of {deathrollTrim}! Use "/deathroll" to continue!'
@@ -47,9 +56,14 @@ def get_response(user_input: str) -> str:
         if (int(deathrollCurrent) == int(1)):
             deathrollCont = 0
             print('loser')
+            authorRecordsForDeathroll[author] = authorRecordsForDeathroll[author] + 1 #keeping track of loses for this game instead
             return f'You rolled a 1! You lose Deathroll!'
         return f'You rolled a {str(deathrollCurrent)} out of {str(deathrollContHolder)}! Use "/deathroll" to continue!'  
-    elif lowered == '/help' or lowered[0] == '/':
+    elif '/myrecords' in lowered:
+        recordStr = f"""Deathroll Loses:
+        \n{author}: {authorRecordsForDeathroll[author]}"""
+        return recordStr
+    elif lowered == '/help' or lowered[0] == '/': #this should be the last /command so that an incorrect / brings up the help
         helpStr = 'Help:\n/roll to roll a d20\n/roll [Size] to roll a die of the given size\n/deathroll [maxNum] to start a deathroll game with the given maximum. First to roll a 1 loses!\n/deathroll to continue a deathroll game or start a new one from 999'
         # someone help me format this help string better lol. idk how to get it on multiple lines and still be one string
         return helpStr

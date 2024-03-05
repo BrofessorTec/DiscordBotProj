@@ -19,12 +19,14 @@ client: Client = Client(intents=intents)
 
 
 async def send_message(message: Message, user_message: str) -> None:
+    author = message.author
+
     if not user_message:
         print('No Message')
         return
     
     try:
-        response: str = get_response(user_message)
+        response: str = get_response(user_message, author)
         await message.channel.send(response)
     except Exception as error:
         print(error)
