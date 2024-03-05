@@ -62,9 +62,13 @@ def get_response(user_input: str, author: str) -> str:
     elif '/myrecords' in lowered:
         recordStr = f"""Deathroll Loses:
         \n{author}: {authorRecordsForDeathroll[author]}"""
-        return recordStr
-    elif lowered == '/help' or lowered[0] == '/': #this should be the last /command so that an incorrect / brings up the help
-        helpStr = 'Help:\n/roll to roll a d20\n/roll [Size] to roll a die of the given size\n/deathroll [maxNum] to start a deathroll game with the given maximum. First to roll a 1 loses!\n/deathroll to continue a deathroll game or start a new one from 999'
+        return recordStr 
+    elif lowered == '/help' or lowered[0] == '/':
+        helpStr = """Help:
+        \n/roll to roll a d20
+        \n/roll [Size] to roll a die of the given size
+        \n/deathroll [maxNum] to start a deathroll game with the given maximum. First to roll a 1 loses!
+        \n/deathroll to continue a deathroll game or start a new one from 999"""
         # someone help me format this help string better lol. idk how to get it on multiple lines and still be one string
         return helpStr
     else:
