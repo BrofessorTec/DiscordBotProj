@@ -3,9 +3,9 @@ from random import choice, randint
 deathrollCont = 0
 deathrollContHolder = 0
 deathrollCurrent = 0
-authorRecordsForDeathroll = dict()  #this should really be a dictionary instead and one per game
+authorRecordsForDeathroll = dict()  #this dict styles need to be one per game
 
-def get_response(user_input: str, author: str) -> str:
+def get_response(user_input: str, author: str, startTimeStamp: str) -> str:
     lowered: str = user_input.lower()
     global deathrollCont
     global deathrollContHolder
@@ -26,6 +26,9 @@ def get_response(user_input: str, author: str) -> str:
         return
     elif len(lowered) > 300:
         return 'Woah there, that is too much info! Please use a simpler command.'
+    elif '/uptime' in lowered:
+        print(startTimeStamp)
+        return f'I have been online since {startTimeStamp}.'
     elif '/roll ' in lowered:
         loweredTrim: int = int(lowered[6:])
         print(loweredTrim)
@@ -66,11 +69,12 @@ def get_response(user_input: str, author: str) -> str:
         return recordStr 
     elif lowered == '/help' or lowered[0] == '/':
         helpStr = """Help:
+        /uptime to display when the bot came online
         /roll to roll a d20
         /roll [Size] to roll a die of the given size
         /deathroll [maxNum] to start a deathroll game with the given maximum. First to roll a 1 loses!
-        /deathroll to continue a deathroll game or start a new one from 999"""
-        # someone help me format this help string better lol. idk how to get it on multiple lines and still be one string
+        /deathroll to continue a deathroll game or start a new one from 999
+        /myrecords to display your game scores since the bot has been online"""
         return helpStr
     else:
         return f'There was an error.'
