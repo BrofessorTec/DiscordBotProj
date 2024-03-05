@@ -44,8 +44,10 @@ async def on_message(message: Message) -> None:
     channel: str = str(message.channel)
 
     print(f'[{channel}] {username}: {user_message}')
-    await send_message(message, user_message)
-
+    if (channel == "bot"):
+        await send_message(message, user_message)
+    else:
+        return
 
 def main() -> None:
     client.run(token=TOKEN)
