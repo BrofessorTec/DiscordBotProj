@@ -69,12 +69,12 @@ def get_response(user_input: str, author: str, startTimeStamp: str) -> str:
         return recordStr 
     elif lowered == '/help' or lowered[0] == '/':
         helpStr = """Help:
-        /uptime to display when the bot came online
-        /roll to roll a d20
-        /roll [Size] to roll a die of the given size
-        /deathroll [maxNum] to start a deathroll game with the given maximum. First to roll a 1 loses!
-        /deathroll to continue a deathroll game or start a new one from 999
-        /myrecords to display your game scores since the bot has been online"""
+    /uptime to display when the bot came online
+    /roll to roll a d20
+    /roll [Size] to roll a die of the given size
+    /deathroll [maxNum] to start a deathroll game with the given maximum. First to roll a 1 loses!
+    /deathroll to continue a deathroll game or start a new one from 999
+    /myrecords to display your game scores since the bot has been online"""
         return helpStr
     else:
         return f'There was an error.'
