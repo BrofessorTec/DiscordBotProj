@@ -64,7 +64,7 @@ def get_response(user_input: str, author: str, startTimeStamp: str) -> str:
         return f'You rolled a {str(deathrollCurrent)} out of {str(deathrollContHolder)}! Use "/deathroll" to continue!'  
     elif '/myrecords' in lowered:
         recordStr = f"""{author}'s Records:"""
-        recordStr += f"""\nDeathroll Loses: {authorRecordsForDeathroll[author]}"""
+        recordStr += f"""\nDeathroll Losses: {authorRecordsForDeathroll[author]}"""
         recordStr += f"""\nOther records:"""
         return recordStr 
     elif lowered == '/help' or lowered[0] == '/':
