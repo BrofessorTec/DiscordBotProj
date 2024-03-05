@@ -60,15 +60,16 @@ def get_response(user_input: str, author: str) -> str:
             return f'You rolled a 1! You lose Deathroll!'
         return f'You rolled a {str(deathrollCurrent)} out of {str(deathrollContHolder)}! Use "/deathroll" to continue!'  
     elif '/myrecords' in lowered:
-        recordStr = f"""Deathroll Loses:
-        \n{author}: {authorRecordsForDeathroll[author]}"""
+        recordStr = f"""{author}'s Records:"""
+        recordStr += f"""\nDeathroll Loses: {authorRecordsForDeathroll[author]}"""
+        recordStr += f"""\nOther records:"""
         return recordStr 
     elif lowered == '/help' or lowered[0] == '/':
         helpStr = """Help:
-        \n/roll to roll a d20
-        \n/roll [Size] to roll a die of the given size
-        \n/deathroll [maxNum] to start a deathroll game with the given maximum. First to roll a 1 loses!
-        \n/deathroll to continue a deathroll game or start a new one from 999"""
+        /roll to roll a d20
+        /roll [Size] to roll a die of the given size
+        /deathroll [maxNum] to start a deathroll game with the given maximum. First to roll a 1 loses!
+        /deathroll to continue a deathroll game or start a new one from 999"""
         # someone help me format this help string better lol. idk how to get it on multiple lines and still be one string
         return helpStr
     else:
