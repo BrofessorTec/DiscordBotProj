@@ -11,7 +11,7 @@ import pandas as pd
 load_dotenv()
 TOKEN: Final[str] = os.getenv('DISCORD_TOKEN')
 
-
+#intents are the permissions the bots needs to be able to respond to messages
 intents: Intents = Intents.default()
 intents.message_content = True
 client: Client = Client(intents=intents)
