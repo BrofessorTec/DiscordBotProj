@@ -32,7 +32,9 @@ async def on_message(message):
     user_messages[username].append(message.created_at)
 
     #clearing older messages from array that fall outside of the timeframe
-    
+    #need to reset the library at that user's name
+    #user_messages[username] = 
+
     if(user_messages[username].length > max_messages):
         await message.channel.send(f'slowwwwww dooowwwwwwnnnn pleeaaasssseeeee')
 
