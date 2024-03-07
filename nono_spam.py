@@ -33,9 +33,10 @@ async def on_message(message):
 
     #clearing older messages from array that fall outside of the timeframe
     #need to reset the library at that user's name
-    #user_messages[username] = 
+    #rewrites the dictionaries with x where each x in the dictionary key value pairs is less than 15 seconds old.
+    user_messages[username] = [x for x in user_messages[username] if (time.now() - x) < timeframe]
 
-    if(user_messages[username].length > max_messages):
+    if len(user_messages[username]) > max_messages:
         await message.channel.send(f'slowwwwww dooowwwwwwnnnn pleeaaasssseeeee')
 
     await bob.process_commands(message)
