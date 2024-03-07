@@ -3,8 +3,16 @@ from discord.ext import commands
 from random import randint
 import datetime
 
+# =================================================================================================
+# Rabbit hole of documentation
+
+# https://discordpy.readthedocs.io/en/latest/ext/commands/api.html#discord.ext.commands.Context
 # https://discordpy.readthedocs.io/en/latest/ext/commands/commands.html
 # https://discordpy.readthedocs.io/en/latest/ext/commands/api.html#bots
+# https://discordpy.readthedocs.io/en/latest/ext/commands/cogs.html#ext-commands-cogs
+# https://discordpy.readthedocs.io/en/latest/ext/commands/api.html#discord.ext.commands.command
+
+# =================================================================================================
 
 # a cog is a way to group related functions. here we have all of our dice and game functions
 class GameCog(commands.Cog):
@@ -18,7 +26,7 @@ class GameCog(commands.Cog):
     # to create a command that would come after our prefix ('/') use @commands.command(name='')
     # this command will be called when a user enters '/roll'
     @commands.command(name='roll')
-    # ctx allows us to send and receive messages from the discord server, 
+    # ctx (context) allows us to send and receive messages from the discord server, 
     # as well as gain access to the users, channel name, and other properties
     async def roll(self, ctx, max_num: int = 20): #make sure the function is async
         roll = randint(1, max_num)
