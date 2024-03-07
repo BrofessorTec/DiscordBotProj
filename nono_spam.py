@@ -6,14 +6,17 @@ from discord.ext import commands
 import datetime
 import time
 
+intents = discord.Intents.default()
+intents.members = True
+
 #15 seconds is the time frame
 timeframe = 15
 max_messages = 5
-#list of user messages
+#empty list of user messages
 user_messages = {}
 
 #creating bob the bot
-bob = commands.Bot(precommand='/')
+bob = commands.Bot(command_prefix='!', intents=intents)
 
 #using Tyler's code here for ease of coding
 @bob.event
