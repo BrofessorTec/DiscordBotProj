@@ -16,7 +16,7 @@ max_messages = 5
 user_messages = {}
 
 #creating bob the bot
-bob = commands.Bot(command_prefix='!', intents=intents)
+bob = commands.Bot(intents=intents)
 
 #using Tyler's code here for ease of coding
 @bob.event
