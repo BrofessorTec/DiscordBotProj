@@ -5,7 +5,6 @@ import discord
 from discord.ext import commands
 import datetime
 import time
-import main
 
 intents = discord.Intents.default()
 intents.members = True
