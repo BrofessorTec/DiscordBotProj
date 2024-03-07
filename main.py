@@ -5,7 +5,7 @@ from discord import Intents, Client, Message
 from responses import get_response
 from datetime import datetime
 import pandas as pd
-
+from nono_spam import bob
 
 # start of code here
 load_dotenv()
@@ -63,6 +63,7 @@ async def on_message(message: Message) -> None:
 
 def main() -> None:
     client.run(token=TOKEN)
+    bob.run(token=TOKEN)
 
 if __name__ == '__main__':
     main()
