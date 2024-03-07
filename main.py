@@ -35,20 +35,16 @@ from responses import GameCog
 
 # events are watched for, commands are called (us using /, as selected earlier, some people use '!' or other symbols)
 
-# Bot is ready
 @client.event
 async def on_ready():
     await client.add_cog(GameCog(client))
     print(f"{client.user} is running since {client.bot_start_time.strftime('%Y-%m-%d %H:%M:%S')}")
 
-# Bot joins a server
 @client.event
 async def on_member_join(member):
-    # Use a real channel ID here
-    channel_id = 123456789012345678  # Replace with the actual channel ID
+    channel_id = 1213568524182880296/1213918263042646067 
     channel = client.get_channel(channel_id)
     if channel:
         await channel.send(f"Welcome to the server, {member.mention}!")
 
-# Run the bot
 client.run(DISCORD_TOKEN)
