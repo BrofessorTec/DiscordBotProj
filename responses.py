@@ -3,6 +3,8 @@ from discord.ext import commands
 from random import randint
 import datetime
 
+# https://discordpy.readthedocs.io/en/latest/ext/commands/commands.html
+
 # a cog is a way to group related functions. here we have all of our dice and game functions
 class GameCog(commands.Cog):
     # intialization of variables
