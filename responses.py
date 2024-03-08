@@ -40,13 +40,14 @@ class GameCog(commands.Cog):
         elif self.deathroll_cont == 0:
             self.deathroll_cont = randint(1, 999)
         roll = randint(1, self.deathroll_cont)
+        deathrollMaxPlaceHolder = self.deathroll_cont
         self.deathroll_cont = roll
         if roll == 1:
             self.author_records[author] = self.author_records.get(author, 0) + 1
             self.deathroll_cont = 0
             await ctx.send(f'You rolled a 1! You lose Deathroll! Total losses: {self.author_records[author]}')
         else:
-            await ctx.send(f'You rolled a {roll}! Roll below to continue the Deathroll!')
+            await ctx.send(f'You rolled a {roll} out of {deathrollMaxPlaceHolder}! Roll below to continue the Deathroll!')
 
     @commands.command(name='uptime')
     async def uptime(self, ctx):
