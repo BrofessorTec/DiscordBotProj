@@ -66,14 +66,14 @@ class GameCog(commands.Cog):
     @commands.command(name='help')
     async def help_command(self, ctx):
         help_message = """
-        Help:
-            /uptime - Display how long the bot has been online
-            /roll - Roll a d20
-            /roll [size] - Roll a die of the given size
-            /deathroll [maxNum] - Start a deathroll game with the given maximum. First to roll a 1 loses!
-            /deathroll - Continue a deathroll game or start a new one from 999
-            /myrecords - Display your game scores since the bot has been online
-            """
+Help:
+  /uptime - Display how long the bot has been online
+  /roll - Roll a d20
+  /roll [size] - Roll a die of the given size
+  /deathroll [maxNum] - Start a deathroll game with the given maximum. First to roll a 1 loses!
+  /deathroll - Continue a deathroll game or start a new one from 999
+  /myrecords - Display your game scores since the bot has been online
+"""
         await ctx.send(help_message)
 
 def setup(bot):
