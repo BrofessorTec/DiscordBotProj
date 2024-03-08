@@ -1,80 +1,80 @@
-from random import choice, randint
+# responses.py
+from discord.ext import commands
+from random import randint
+import datetime
 
-deathrollCont = 0
-deathrollContHolder = 0
-deathrollCurrent = 0
-authorRecordsForDeathroll = dict()  #this dict styles need to be one per game
+# =================================================================================================
+# Rabbit hole of documentation
 
-def get_response(user_input: str, author: str, startTimeStamp: str) -> str:
-    lowered: str = user_input.lower()
-    global deathrollCont
-    global deathrollContHolder
-    global deathrollCurrent
-    global authorRecordsForDeathroll
-    print(author)
-    print(authorRecordsForDeathroll.get(author))
-    if authorRecordsForDeathroll.get(author) is None:  #contains is not valid, check for key another way
-        authorRecordsForDeathroll[author] = 0  #initial value for each record should be zero
+# https://discordpy.readthedocs.io/en/latest/ext/commands/api.html#discord.ext.commands.Context
+# https://discordpy.readthedocs.io/en/latest/ext/commands/commands.html
+# https://discordpy.readthedocs.io/en/latest/ext/commands/api.html#bots
+# https://discordpy.readthedocs.io/en/latest/ext/commands/cogs.html#ext-commands-cogs
+# https://discordpy.readthedocs.io/en/latest/ext/commands/api.html#discord.ext.commands.command
 
-    print(authorRecordsForDeathroll[author])
+# =================================================================================================
 
-    print(lowered)
+# a cog is a way to group related functions. here we have all of our dice and game functions
+class GameCog(commands.Cog):
+    # intialization of variables
+    def __init__(self, bot):
+        self.bot = bot
+        self.deathroll_cont = 0
+        self.author_records = {}
+        self.start_time = datetime.datetime.now()  # same as bot.start_time
 
-    if lowered == '':
-        return 'Well hello!'
-    elif lowered[0] != '/':
-        return
-    elif len(lowered) > 300:
-        return 'Woah there, that is too much info! Please use a simpler command.'
-    elif '/uptime' in lowered:
-        print(startTimeStamp)
-        return f'I have been online since {startTimeStamp}.'
-    elif '/roll ' in lowered:
-        loweredTrim: int = int(lowered[6:])
-        print(loweredTrim)
-        loweredTrimNum = str(randint(1,loweredTrim))
-        print(loweredTrimNum)
-        return f'You rolled a {loweredTrimNum} out of {str(loweredTrim)}!'
-    elif '/roll' in lowered:
-        return f'You rolled a {randint(1,20)} out of 20!'
-    elif '/deathroll ' in lowered:
-        deathrollTrim: int = int(lowered[11:])
-        print(deathrollTrim)
-        deathrollTrimNum = str(randint(1,deathrollTrim))
-        print(deathrollTrimNum)
-        if (deathrollTrimNum == 1):
-            deathrollTrimNum = 0
-            authorRecordsForDeathroll[author] = authorRecordsForDeathroll[author] + 1 #keeping track of loses for this game instead
-            return f'You rolled a 1! You lose Deathroll!'
-        deathrollCont = deathrollTrimNum
-        return f'You rolled a {deathrollTrimNum} out of {deathrollTrim}! Use "/deathroll" to continue!'
-    elif '/deathroll' in lowered:
-        if deathrollCont == 0:
-            deathrollCont = 999
-            print(deathrollCont) 
-        deathrollCurrent = str(randint(1,int(deathrollCont)))
-        deathrollContHolder = str(deathrollCont)
-        deathrollCont = deathrollCurrent
-        print(deathrollCurrent)
-        if (int(deathrollCurrent) == int(1)):
-            deathrollCont = 0
-            print('loser')
-            authorRecordsForDeathroll[author] = authorRecordsForDeathroll[author] + 1 #keeping track of loses for this game instead
-            return f'You rolled a 1! You lose Deathroll!'
-        return f'You rolled a {str(deathrollCurrent)} out of {str(deathrollContHolder)}! Use "/deathroll" to continue!'  
-    elif '/myrecords' in lowered:
-        recordStr = f"""{author}'s Records:"""
-        recordStr += f"""\nDeathroll Losses: {authorRecordsForDeathroll[author]}"""
-        recordStr += f"""\nOther records:"""
-        return recordStr 
-    elif lowered == '/help' or lowered[0] == '/':
-        helpStr = """Help:
-    /uptime to display when the bot came online
-    /roll to roll a d20
-    /roll [Size] to roll a die of the given size
-    /deathroll [maxNum] to start a deathroll game with the given maximum. First to roll a 1 loses!
-    /deathroll to continue a deathroll game or start a new one from 999
-    /myrecords to display your game scores since the bot has been online"""
-        return helpStr
-    else:
-        return f'There was an error.'
+    # to create a command that would come after our prefix ('/') use @commands.command(name='')
+    # this command will be called when a user enters '/roll'
+    @commands.command(name='roll')
+    # ctx (context) allows us to send and receive messages from the discord server, 
+    # as well as gain access to the users, channel name, and other properties
+    async def roll(self, ctx, max_num: int = 20): #make sure the function is async
+        roll = randint(1, max_num)
+        await ctx.send(f'You rolled a {roll} out of {max_num}!')
+
+    @commands.command(name='deathroll')
+    async def deathroll(self, ctx, max_num: int = None):
+        author = str(ctx.author)
+        if max_num is not None:
+            self.deathroll_cont = randint(1, max_num)
+        elif self.deathroll_cont == 0:
+            self.deathroll_cont = randint(1, 999)
+        roll = randint(1, self.deathroll_cont)
+        deathrollMaxPlaceHolder = self.deathroll_cont
+        self.deathroll_cont = roll
+        if roll == 1:
+            self.author_records[author] = self.author_records.get(author, 0) + 1
+            self.deathroll_cont = 0
+            await ctx.send(f'You rolled a 1! You lose Deathroll! Total losses: {self.author_records[author]}')
+        else:
+            await ctx.send(f'You rolled a {roll} out of {deathrollMaxPlaceHolder}! Roll below to continue the Deathroll!')
+
+    @commands.command(name='uptime')
+    async def uptime(self, ctx):
+        current_time = datetime.datetime.now()
+        uptime_duration = current_time - self.start_time
+        await ctx.send(f'Uptime: {str(uptime_duration)}')
+
+    @commands.command(name='myrecords')
+    async def myrecords(self, ctx):
+        author = str(ctx.author)
+        losses = self.author_records.get(author, 0)
+        await ctx.send(f"{author}'s Deathroll Losses: {losses}")
+
+    # the original help command built into discord.py is being overwritten since it is set to none in main.py
+    # if we did not want to overwrite the default help command, we should rename it
+    @commands.command(name='help')
+    async def help_command(self, ctx):
+        help_message = """
+        Help:
+            /uptime - Display how long the bot has been online
+            /roll - Roll a d20
+            /roll [size] - Roll a die of the given size
+            /deathroll [maxNum] - Start a deathroll game with the given maximum. First to roll a 1 loses!
+            /deathroll - Continue a deathroll game or start a new one from 999
+            /myrecords - Display your game scores since the bot has been online
+            """
+        await ctx.send(help_message)
+
+def setup(bot):
+    bot.add_cog(GameCog(bot))

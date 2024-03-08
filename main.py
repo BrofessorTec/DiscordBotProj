@@ -1,68 +1,50 @@
-from typing import Final
-import os
-from dotenv import load_dotenv
-from discord import Intents, Client, Message
-from responses import get_response
+# main.py
+# ===============================================================================================================================
+#      Main just set up the bot and tells it to run. as well as give it acces to events and commands
+#      We have a start time but we could add some other statistics here too
+# ===============================================================================================================================
+
+import discord # discord.py to use its built in commands. this is our api
+from discord.ext import commands
 from datetime import datetime
-import pandas as pd
+from dotenv import load_dotenv # gets our key from the .env file so that it stays hidden. you can name the file whatever
+import os
 
-
-# start of code here
+# Load environment variables from .env file
 load_dotenv()
-TOKEN: Final[str] = os.getenv('DISCORD_TOKEN')
+DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
 
-#intents are the permissions the bots needs to be able to respond to messages
-intents: Intents = Intents.default()
+# Intents and Bot initialization
+# Intents are specific events that your bot is allowed to watch for and act on
+# By setting it to default the bot will monitor messages, reactions, when a message or reaction is deleted, etc.
+intents = discord.Intents.default()
+# this makes sure that our bot can interact specifically with member events
+intents.members = True
+# i had a bug and somehow this fixed it
 intents.message_content = True
-client: Client = Client(intents=intents)
+# sets the prefix to send a command to the bot. in this case we are using '/'
+client = commands.Bot(command_prefix='/', intents=intents)
 
-startTime = None
-started = False
+# start the bot and set start time as an attribute of the bot, set it to the time you started it
+client.bot_start_time = datetime.now()
 
-async def startTime():
-    global started
-    global startTime
-    started = True
-    startTime = f'{datetime.now().time().hour}:{datetime.now().time().minute} EST on {datetime.now().date()}'
+# the discord api already has a help command, which we want to override to display our own commands
+client.help_command = None
+# Loading the Cogs, this is from our responses file
+from responses import GameCog
 
-async def send_message(message: Message, user_message: str, startTimeStamp: str) -> None:
-    author = message.author
-
-    if not user_message:
-        print('No Message')
-        return
-    
-    try:
-        response: str = get_response(user_message, author, startTime)
-        await message.channel.send(response)
-    except Exception as error:
-        print(error)
-
-    
-@client.event
-async def on_ready() -> None:
-    global started
-    print(f'{client.user} is running')
-    if started is False:
-        await startTime()
+# events are watched for, commands are called (us using /, as selected earlier, some people use '!' or other symbols)
 
 @client.event
-async def on_message(message: Message) -> None:
-    if message.author == client.user:
-        return   
+async def on_ready():
+    await client.add_cog(GameCog(client))
+    print(f"{client.user} is running since {client.bot_start_time.strftime('%Y-%m-%d %H:%M:%S')}")
 
-    username: str = str(message.author)
-    user_message: str = message.content
-    channel: str = str(message.channel)
+@client.event
+async def on_member_join(member):
+    channel_id = 1213568524182880296/1213918263042646067 
+    channel = client.get_channel(channel_id)
+    if channel:
+        await channel.send(f"Welcome to the server, {member.mention}!")
 
-    print(f'[{channel}] {username}: {user_message}')
-    if (channel == "bot"):
-        await send_message(message, user_message, startTime)
-    else:
-        return
-
-def main() -> None:
-    client.run(token=TOKEN)
-
-if __name__ == '__main__':
-    main()
+client.run(DISCORD_TOKEN)
