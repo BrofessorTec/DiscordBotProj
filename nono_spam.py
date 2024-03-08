@@ -6,8 +6,8 @@ from discord.ext import commands
 import datetime
 import time
 
-#15 seconds is the time frame
-timeframe = 15
+#10 seconds is the time frame
+timeframe = 10
 max_messages = 5
 #list of user messages
 user_messages = {}
