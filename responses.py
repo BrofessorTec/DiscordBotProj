@@ -68,6 +68,8 @@ class GameCog(commands.Cog):
         help_message = """
 Help:
   /uptime - Display how long the bot has been online
+  /giverole @user [role]  - Gives the specified user the role if it exists
+  /removerole @user [role]  - Gives the specified user the role if it exists
   /roll - Roll a d20
   /roll [size] - Roll a die of the given size
   /deathroll [maxNum] - Start a deathroll game with the given maximum. First to roll a 1 loses!
