@@ -71,7 +71,7 @@ async def on_message(message):
         #this currently doesnt do anything..
 
     if(username != "SSS_Bot" and len(user_messages[username]) > max_messages and user_messages[username]):
-        await message.channel.send(f'{username} slowwwwww dooowwwwwwnnnn pleeaaasssseeeee')
+        await message.channel.send(f'{message.author.mention} slowwwwww dooowwwwwwnnnn pleeaaasssseeeee')
         user_messages[username] = []
 
     await client.process_commands(message)
