@@ -6,7 +6,9 @@
 
 import discord # discord.py to use its built in commands. this is our api
 from discord.ext import commands
-from datetime import datetime
+# timedelta is a special library within datetime that allows us to set a time interval, 
+# and has some built in functions to convert from different time frames (ex days to seconds) 
+from datetime import datetime, timedelta
 from dotenv import load_dotenv # gets our key from the .env file so that it stays hidden. you can name the file whatever
 import os
 
@@ -37,7 +39,7 @@ from responses import GameCog
 #10 seconds is the time frame
 timeframe = 10
 max_messages = 5
-#list of user messages
+# dictionary named user messages - will store (username, list(message times)), weird not defining the types here lol
 user_messages = {}
 
 
@@ -58,20 +60,45 @@ async def on_member_join(member):
 
 @client.event
 async def on_message(message):
-    print(message) # for logging
-    username = message.author.name
-    print(username) # for logging
-    #checking to see if username is in dictionary that was created earlier
-    if username != "SSS_Bot" and username not in user_messages:
-        #if not, the username is added as a key with an empty array to the dictionary
-        user_messages[username] = []
-    #here we are adding the time the message was created to the array (value) of the user (key) in the dictionary
-    if username != "SSS_Bot": 
-        user_messages[username].append(message.created_at)
-        #this currently doesnt do anything..
+    # says that this does not apply to the bot, just returns
+    if message.author.bot:
+        return
 
-    if(username != "SSS_Bot" and len(user_messages[username]) > max_messages and user_messages[username]):
-        await message.channel.send(f'{message.author.mention} slowwwwww dooowwwwwwnnnn pleeaaasssseeeee')
+    # gets the username of the person who sent the message
+    username = message.author.name
+    # gets the time that the message was sent
+    current_time = message.created_at
+    
+    # if the user is not in our dictionary -
+    # creates a dictionary entry of the username and an associated list that is blank for the moment.
+    if username not in user_messages:
+        user_messages[username] = []
+    
+    # add the time the message was sent to the list belonging to the username in the dictionary
+    user_messages[username].append(current_time)
+
+    # i added timedelta to our imports
+    # calculates the timeframe by subtracting timeframe(15 - defined at top) seconds from the current time
+    # timedelta is used to convert to a timeframe. 
+    timeframe_start = current_time - timedelta(seconds=timeframe)
+    
+    # creates a blank list of recent messages
+    recent_messages = []
+
+    # populates the recent_messages list of the user with all of the messages they sent within the specified timeframe
+    for msg_time in user_messages[username]:
+        if msg_time > timeframe_start:
+            recent_messages.append(msg_time)
+
+    # updates the list of recent messages associated with a user in the dictionary
+    # this will count up until it is greater than the max message count, then be cleared (maybe with an action taken)
+    user_messages[username] = recent_messages
+
+    # gets the length of messages in the list
+    if len(recent_messages) > max_messages:
+        await message.channel.send(f'{message.author.mention}, slowwwwww dooowwwwwwnnnn pleeaaasssseeeee:)')
+        # clears recent messages so we can start over with testing. 
+        # may want to do some other action like block the user from sending messages.
         user_messages[username] = []
 
     await client.process_commands(message)
