@@ -55,6 +55,7 @@ async def on_member_join(member):
     if channel:
         await channel.send(f"Welcome to the server, {member.mention}!")
 
+
 @client.event
 async def on_message(message):
     print(message) # for logging
@@ -70,9 +71,29 @@ async def on_message(message):
         #this currently doesnt do anything..
 
     if(username != "SSS_Bot" and len(user_messages[username]) > max_messages and user_messages[username]):
-        await message.channel.send(f'{username} slowwwwww dooowwwwwwnnnn pleeaaasssseeeee')
+        await message.channel.send(f'{message.author.mention} slowwwwww dooowwwwwwnnnn pleeaaasssseeeee')
         user_messages[username] = []
 
     await client.process_commands(message)
+
+@client.command(name='giverole')
+async def assign_role(ctx, member: discord.Member, role_tag: str):
+    role = discord.utils.get(ctx.guild.roles, name=role_tag)
+
+    if role:
+        await member.add_roles(role)
+        await ctx.send(f"Role '{role_tag}' assigned to {member.mention}")
+    else:
+        await ctx.send(f"Role '{role_tag}' not found.")
+
+@client.command(name='removerole')
+async def remove_role(ctx, member: discord.Member, role_tag: str):
+    role = discord.utils.get(ctx.guild.roles, name=role_tag)
+
+    if role:
+        await member.remove_roles(role)
+        await ctx.send(f"Role '{role_tag}' removed from {member.mention}")
+    else:
+        await ctx.send(f"Role '{role_tag}' not found.")
 
 client.run(DISCORD_TOKEN)
