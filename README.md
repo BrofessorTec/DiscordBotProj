@@ -11,3 +11,4 @@
   Code was refactored using discord.ext to have a better standard for us all to follow and uses more library functionality than we did before<br>
   Spam deterrent was tested and discovered that it was sending the spam message after 5 messages regardless of the time period that was between them. This will need to be fixed<br>
   Spam deterrent also was stuck in an infinite loop because the bot was warning itself that it was spamming with every message. Added the bot's name to the if statement so that it is not looked at for spam detection.<br>
+  Added some error handling so the bot returns a message when an incorrect command is entered. <br>
