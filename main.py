@@ -123,4 +123,10 @@ async def remove_role(ctx, member: discord.Member, role_tag: str):
     else:
         await ctx.send(f"Role '{role_tag}' not found.")
 
+
+@client.event
+async def on_command_error(ctx, error):
+    await ctx.send(f"Sorry, this was not a valid command.")
+
+
 client.run(DISCORD_TOKEN)
